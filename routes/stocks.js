@@ -3,8 +3,8 @@ const Controller = require("../controllers/controller")
 const router = express.Router()
 
 // define endpoint disini
-// ada button/link yang bisa mengarah ke stock/company details
-router.get(`/`,Controller.renderInvestments)
+// bisa difilter stocks yang masih ada lot yang masih bisa dibeli, sesuai bidang, risk, atau search by name
+router.get(`/`,Controller.renderStocks)
 
 // define endpoint disini
 module.exports = router
