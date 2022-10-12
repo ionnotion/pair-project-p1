@@ -29,9 +29,10 @@ module.exports = {
         // admin, investor
         type: Sequelize.STRING
       },
-      companyName: {
-        type: Sequelize.STRING
-      },
+      // placeholder
+      // companyName: {
+      //   type: Sequelize.STRING
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

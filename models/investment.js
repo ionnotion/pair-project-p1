@@ -14,9 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Investment.init({
+    name: DataTypes.STRING,
+    lot: DataTypes.INTEGER,
     CompanyId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
+    hooks: {
+      beforeCreate : (investment) => {
+        investment.name = `${CompanyId}-${UserId}-${new Date().getTime()}`
+      }
+    },
     sequelize,
     modelName: 'Investment',
   });

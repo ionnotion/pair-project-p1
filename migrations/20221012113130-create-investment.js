@@ -9,6 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      name: {
+        //ini nanti di generate dengan hook kalau user ada transaksi
+        type: Sequelize.INTEGER
+      },
+      lot: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

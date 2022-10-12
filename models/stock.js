@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Stock.belongsTo(models.Company)
+      Stock.belongsToMany(models.User, {through: `Investments`})
     }
   }
   Stock.init({
-    volume: DataTypes.INTEGER,
+    totalLot: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     type: DataTypes.STRING
   }, {

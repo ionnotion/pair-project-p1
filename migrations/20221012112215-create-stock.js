@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      volume: {
+      totalLot: {
         type: Sequelize.INTEGER
       },
       price: {
