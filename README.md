@@ -1,2 +1,2 @@
 # pair-project-p1
-Pair project week 1
+Pair project phase 1
