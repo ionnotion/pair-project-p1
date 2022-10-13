@@ -31,8 +31,8 @@ router.use((req,res,next) => {
 })
 
 router.use(`/users`, usersRoutes)
-// router.use(`/stocks`, stocksRoutes)
-// router.use(`/companies`, companiesRoutes)
+router.use(`/stocks`, stocksRoutes)
+router.use(`/companies`, companiesRoutes)
 
 // router.use(`/investments`, investmentsRoutes)
 

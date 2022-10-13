@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Stock.belongsTo(models.Company)
-      // Stock.hasMany(models.Investment)
-      Stock.belongsToMany(models.User, {through: `Investments`})
+      Stock.hasMany(models.Investment)
+      // Stock.belongsToMany(models.User, {through: `Investments`})
     }
   }
   Stock.init({
