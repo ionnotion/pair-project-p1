@@ -1,4 +1,4 @@
-const {User, UserDetail, Company, Investment, Stock} = require(`../models/`)
+const {User, UserDetail, Company, Investment, Stock, sequelize} = require(`../models/`)
 const bcrypt = require(`bcryptjs`)
 const url = require(`url`)
 
@@ -6,14 +6,11 @@ class Controller {
     static test (req,res) {
         let options = { 
             include:{
-                all:true,
-                include: {
-                    all:true
-                }
+                all:true
             }
         }
 
-        Company.findAll(options)
+        Stock.findAll(options)
             .then(data => {
                 res.send(data)
             })
@@ -59,6 +56,11 @@ class Controller {
                 }
             })
             .catch(err => {
+                // if(err.name = `sequelizeValidationError`)
+                // let errors = err.errors.map(el => {
+                //     return el.messages
+                // })
+                console.log(err)
                 res.send(err)
             })
     }
@@ -85,6 +87,7 @@ class Controller {
                         username:sessionUsername
                 }})
                     .then(() => {
+                        // reset password to default, buat hashed on database   
                         res.redirect(url.format({
                             pathname: `./`,
                             query: {message:`Password has been reset to "default".`}
@@ -128,26 +131,57 @@ class Controller {
     }
 
     static renderRegister (req,res) {
-        res.render(`register`)
+        let { errors } = req.query
+        if(typeof errors === `string`) errors = [errors] 
+        res.render(`register`, {errors})
     }
 
     static postRegister (req,res) {
-        let {username, email, password, firstName, lastName, birthday, validationQuestion, validationAnswer} = req.body
+        let {username, email, password, confirmation, firstName, lastName, birthday, validationQuestion, validationAnswer} = req.body
+
+        if(password != confirmation) {
+            res.redirect(url.format({
+                pathname: `/register`,
+                query: {errors: [`Password doesn't match!`]}
+            }))
+            return
+        }
+
         console.log(req.body)
         let userData = {username, email, password}
         let userDetails = {firstName, lastName, birthday, validationQuestion, validationAnswer}
-        User.create(userData)
-            .then (data => {
-                userDetails.UserId = data.id
-                return UserDetail.create(userDetails)
-            })
-            .then (() => {
-                res.redirect(`/`)
-            })
-            .catch (err => {
-                console.log(err)
-                res.send(err)
-            })
+        if(validationQuestion && validationAnswer){
+            User.create(userData)
+                .then (data => {
+                    userDetails.UserId = data.id
+                    return UserDetail.create(userDetails)
+                })
+                .then (() => {
+                    res.redirect(url.format({
+                        pathname: `/login`,
+                        query: {message:`Create user succesful.`}
+                    }))
+                })
+                .catch (err => {
+                    let errors
+                    console.log(err)
+                    if(err.name == `SequelizeValidationError` || err.name == `SequelizeUniqueConstraintError`) {
+                        errors = err.errors.map(el => {
+                            return el.message
+                        })
+                        res.redirect(url.format({
+                            pathname: `/register`,
+                            query: {errors}
+                        }))
+                    }
+                    else res.send(err)
+                })
+        } else {
+            res.redirect(url.format({
+                pathname: `/register`,
+                query: {errors: [`Validation answer and question is needed!`]}
+            }))
+        }
     }
 
     static renderUserHome(req,res) {

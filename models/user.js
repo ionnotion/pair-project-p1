@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       allowNull:false,
+      unique: true,
       validate: {
         notEmpty : {msg: `Username cannot be empty!`},
         notNull : {msg: `Username cannot be null!`},
@@ -38,10 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate : {
-        isEmail : {msg: `Email must be in email format!`},
-        notempty : {msg: `Email cannot be empty!`},
-        notNull : {msg: `Email cannot be null!`}
+        notEmpty : {msg: `Email cannot be empty!`},
+        notNull : {msg: `Email cannot be null!`},
+        isEmail : {msg: `Email must be in email format!`}
       }
     },
     password: {
@@ -59,7 +61,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: {msg: `Password must be 6-15 characters long`}
         }
       }
-    }
+    },
+    role : DataTypes.STRING
   }, {
     hooks: {
       beforeCreate : (user) => {
