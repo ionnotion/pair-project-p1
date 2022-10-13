@@ -18,6 +18,9 @@ module.exports = {
       birthDate: {
         type: Sequelize.DATE
       },
+      balance: {
+        type: Sequelize.INTEGER
+      },
       validationQuestion: {
         type: Sequelize.STRING
       },

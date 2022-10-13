@@ -7,6 +7,11 @@
     <title>Document</title>
 </head>
 <body>
+
+    <% if (errors) { %>
+        <h4><%= errors.join(` `) %> </p>
+    <% } %>
+
     <form method="POST" action ="/register">
         <label>Username :</label>
         <input type="text" name="username">
@@ -16,7 +21,6 @@
         <input type="password" name="password">
         <label>Re-enter Password :</label>
         <input type="password" name="confirmation">
-        <input type="submit" value="Register">
 
         <label>First Name (optional) :</label>
         <input type="text" name="firstName">
