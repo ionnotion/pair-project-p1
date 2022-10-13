@@ -191,19 +191,30 @@ class Controller {
     static renderUserHome(req,res) {
         const id = req.session.UserId
         const username = req.session.username
-        console.log(req.session)
-        User.findOne({
+        let { search } = req.query
+
+        let options =  {
             where : {id},
             include : [{
                 model: Investment,
                 include : {
-                    model : Stock
+                    model : Stock,
+                    where: {}
                 }
             },{
                 model : UserDetail
             }
             ]
-        })
+        }
+
+        if(search) {
+            options.include[0].include.where = {
+                ...options.include[0].include.where,
+                name : {[Op.iLike] : `%${search}%`}
+            }
+        }
+
+        User.findOne(options)
         .then(data => {
             // res.send(data)
             res.render('userInvestments',{ data, profit, toCurrencyRupiah,username })
