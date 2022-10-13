@@ -14,17 +14,18 @@ const investmentsRoutes = require(`./investments`)
 // define routing lain disini
 
 
-// define endpoint lain disini
+// define endpoint lain disin
 //landing page isinya fluff (welcome bla bla) dan button untuk login dan register aja ya?
-router.use(`/`, (req,res) => res.send(`homepage`))
+router.get(`/`, Controller.landingPage)
 
 router.use(`/login`, loginRoutes)
 router.use(`/register`, registerRoutes)
 
-router.use(`/companies`, companiesRoutes)
-router.use(`/stocks`, stocksRoutes)
-router.use(`/users`, usersRoutes)
+// router.use(`/companies`, companiesRoutes)
+// router.use(`/stocks`, stocksRoutes)
+// router.use(`/users`, usersRoutes)
 
-router.use(`/investments`, investmentsRoutes)
+// router.use(`/investments`, investmentsRoutes)
 
 // define endpoint lain disini
+module.exports = router
