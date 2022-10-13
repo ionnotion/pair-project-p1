@@ -3,6 +3,7 @@ const bcrypt = require(`bcryptjs`)
 const url = require(`url`)
 const {profit, toCurrencyRupiah, timeSince} = require('../helpers/helper')
 const { group } = require('console')
+const { Op } = require('sequelize')
 
 class Controller {
     static test (req,res) {
@@ -225,13 +226,25 @@ class Controller {
     }
 
     static renderStocks(req,res) {
-        let bought = []
-        Stock.findAll({
+        let { search } = req.query
+        let options = {
             include : {
                 model : Investment
-            }    
-        })
+            },
+            where : {}
+        }
+        let bought = []
+
+        if(search) {
+            options.where = {
+                ...options.where,
+                type : search
+            }
+        }
+
+        Stock.findAll(options)
         .then(data => {
+            // count bought stocks
             data.forEach(el=>{
                 let temp = 0
                 el.Investments.forEach(el2=>{
@@ -246,16 +259,31 @@ class Controller {
         })
     }
 
-    static renderCompanyList(req,res) {
+    static renderCompanyDetails(req,res) {
+        let { CompanyId } = req.params
 
-        Company.findAll()
+        Company.findByPk(CompanyId)
             .then(data => {
                 res.send(data)
             })
             .catch(err => {
                 console.log(err)
-                res.send(err)
+                res.redirect(`/companies`)
             })
+    }
+
+    static userSignout(req, res) {
+        req.session.destroy(err=> {
+            if(err) {
+                res.send(err)
+            } else {
+                console.log(`User logged out.`)
+                res.redirect(url.format({
+                    pathname:`/`,
+                    query: {message: `You've been logged out.`}
+                }))
+            }
+        })
     }
 }
 
