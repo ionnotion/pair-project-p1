@@ -4,42 +4,92 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .gradient-custom {
+        background: linear-gradient(to right, rgb(230, 230, 230), rgb(95, 95, 95))
+        }
+    </style>
 </head>
 <body>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5" style="width: 75%;">
+              <div class="card bg-dark text-white" style="border-radius: 1rem;opacity: 60%;">
+                <div class="card-body p-5 text-center">
+      
+                  <div class="mb-md-3 mt-md-2 pb-5">
+      
+                    <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+                                       
+                    <form action="/register" method="post"> 
+                      <div class="row"> 
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typeEmailX">Username :</label>
+                          <input type="text" class="form-control form-control-lg" name="username" />
+                        </div>
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typeEmailX">Email :</label>
+                          <input type="email" class="form-control form-control-lg" name="email" />
+                        </div>
+                      </div>
 
-    <% if (errors) { %>
-        <h4><%= errors.join(` `) %> </p>
-    <% } %>
+                      <div class="row"> 
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typePasswordX">Password</label>
+                          <input type="password" id="typePasswordX" class="form-control form-control-lg" name="password"/>
+                        </div>
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typePasswordX">Re-enter Password</label>
+                          <input type="password" id="typePasswordX" class="form-control form-control-lg" name="confirmation"/>
+                        </div>
+                      </div>
 
-    <form method="POST" action ="/register">
-        <label>Username :</label>
-        <input type="text" name="username">
-        <label>Email :</label>
-        <input type="email" name="email">
-        <label>Password :</label>
-        <input type="password" name="password">
-        <label>Re-enter Password :</label>
-        <input type="password" name="confirmation">
+                      <div class="row"> 
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typeEmailX">First Name (optional) :</label>
+                          <input type="text" class="form-control form-control-lg" name="firstName" />
+                        </div>
+                        <div class="col form-outline form-white mb-4"> 
+                          <label class="form-label" for="typeEmailX">Last Name (optional) :</label>
+                          <input type="text" class="form-control form-control-lg" name="lastName" />
+                        </div>
+                      </div>
+                          <label class="form-label" for="typeEmailX">Birthday :</label>
+                          <input type="date" class="form-control form-control-lg" name="birthday" />
+                        </div>
 
-        <label>First Name (optional) :</label>
-        <input type="text" name="firstName">
-        <label>Last Name (optional) :</label>
-        <input type="text" name="lastName">
+                        <div class="row"> 
+                          <div class="col form-outline form-white mb-4"> 
+                            <label class="form-label" for="typeEmailX">Recovery Question :</label>
+                          <select name="validationQuestion" class="form-select">
+                            <option disabled selected>Select One</option>
+                        <% [`What's your mother's maiden name?`,`What's your first pet name?`,`What's your favourite food?`,`What's your favourite color?`].forEach(el =>{ %>
+                            <option value="<%= el %>"><%= el %></option>
+                        <% }) %>
+                        </select>
+                      </div>
+                          <div class="col form-outline form-white mb-4"> 
+                            <label class="form-label" for="typeEmailX">Answer :</label>
+                            <input type="text" class="form-control form-control-lg" name="validationAnswer" />
+                          </div>
+                        </div>
 
-        <label>Birthday :</label>
-        <input type="date" name="birthday">
-
-        <label>Recovery Question :</label>
-        <select name="validationQuestion">
-            <option disabled selected>Select One</option>
-        <% [`What's your mother's maiden name?`,`What's your first pet name?`,`What's your favourite food?`,`What's your favourite color?`].forEach(el =>{ %>
-            <option value="<%= el %>"><%= el %></option>
-        <% }) %>
-        </select>
-        <label>Answer :</label>
-        <input type="text" name="validationAnswer">
-        <input type="submit" value="Register">
-    </form>
+                        <% if (errors) { %>
+                          <p style="color: red;"><%= errors.join(` `) %></p>
+                          <% } %>
+                    
+                        <button class="btn btn-outline-light btn-lg px-5" type="submit" value="Register">Register</button>
+                      </form>
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 </body>
 </html>

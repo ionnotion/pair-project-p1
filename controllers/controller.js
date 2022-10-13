@@ -24,7 +24,7 @@ class Controller {
     }
 
     static landingPage (req,res) {
-        res.render(`homepage`)
+        res.redirect(`/login`)
     }
 
     static renderLogin (req,res) {
@@ -191,6 +191,8 @@ class Controller {
     static renderUserHome(req,res) {
         const id = req.session.UserId
         const username = req.session.username
+        const role = req.session.UserRole
+
         let { search } = req.query
 
         let options =  {
@@ -217,7 +219,7 @@ class Controller {
         User.findOne(options)
         .then(data => {
             // res.send(data)
-            res.render('userInvestments',{ data, profit, toCurrencyRupiah,username })
+            res.render('userInvestments',{ id,data, profit, toCurrencyRupiah,username,role })
         })
         .catch (err => {
             res.send('err')
@@ -225,7 +227,9 @@ class Controller {
     }
 
     static renderCompanyList(req,res) {
+        const id = req.session.UserId
         const username = req.session.username
+        const role = req.session.UserRole
         let { search } = req.query
         console.log(search)
 
@@ -246,7 +250,7 @@ class Controller {
         Company.findAll(options)
         .then(data => {
             // res.send(data)
-            res.render('userCompany',{ data,username })
+            res.render('userCompany',{ id,data,username,role })
         })
         .catch (err => {
             res.send(err)
@@ -256,7 +260,9 @@ class Controller {
     static renderStocks(req,res) {
         let { filter } = req.query
         console.log(filter)
+        const id = req.session.UserId
         const username = req.session.username
+        const role = req.session.UserRole
         let bought = []
         let options = {
             include : {
@@ -282,7 +288,7 @@ class Controller {
                 })
                 bought.push(temp)
             })
-            res.render('userStock',{ data,bought,username })
+            res.render('userStock',{ id,data,bought,username,role })
         })
         .catch (err => {
             res.send(err)
@@ -291,10 +297,14 @@ class Controller {
 
     static renderCompanyDetails(req,res) {
         let { CompanyId } = req.params
+        const id = req.session.UserId
+        const username = req.session.username
+        const role = req.session.UserRole
+        const {getTitle} = Company
 
         Company.findByPk(CompanyId)
             .then(data => {
-                res.send(data)
+                res.render('companyDetail',{data,role,username,id,getTitle})
             })
             .catch(err => {
                 console.log(err)

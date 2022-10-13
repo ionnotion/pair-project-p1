@@ -26,14 +26,19 @@
         </div>
         <div style="width: 75%;"> 
             <div style="height: 10vh;width: 100%;" class="container bg-secondary"> 
-              <h3 style="font-weight: 400;color: white;" class=" position-absolute top-0 mt-4 px-5">
-                <%= `${data.greeting()}, `%> Your Balance : <%= toCurrencyRupiah(data.UserDetail.balance) %> 
-              </h3>
+
+              <% if(role==='investor') {%>
+                <h3 style="font-weight: 400;color: white;" class=" position-absolute top-0 mt-4 px-5">
+                  <%= `${data.greeting()}, `%>Your Balance : <%= toCurrencyRupiah(data.UserDetail.balance) %> 
+                </h3>
+                <% } %> 
+
               <form class="d-flex position-absolute top-0 end-0 mt-4 px-5">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
                 <button class="btn btn-primary" type="submit">Search</button>
               </form>
             </div>
+            <div class="ex4"> 
             <table class="table table-hover position-absolute top-50 ms-5" style="width: 65%;"  >
                     <thead>
                         <tr>
@@ -63,6 +68,7 @@
                       </tbody>
                       </div>
                 </table>
+              </div>
             </div>
         </div>
     </div>
