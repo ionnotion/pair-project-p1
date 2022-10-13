@@ -17,6 +17,8 @@ module.exports = {
       el.createdAt = new Date()
       el.updatedAt = new Date()
 
+      el.balance = 1000000
+
       return el
      })
 

@@ -6,9 +6,9 @@ class Controller {
     static test (req,res) {
         let options = { 
             include:{
-                model : Stock,
-                include : {
-                    model: Company
+                all:true,
+                include: {
+                    all:true
                 }
             }
         }
@@ -18,20 +18,21 @@ class Controller {
                 res.send(data)
             })
             .catch(err => {
+                console.log(err)
                 res.send(err)
             })
     }
 
     static landingPage (req,res) {
-        res.send(`landing page`)
+        res.render(`homepage`)
     }
 
     static renderLogin (req,res) {
-        res.render(`login`)
+        const { error, message } = req.query
+        res.render(`login`, { error, message })
     }
 
     static postLogin (req,res) {
-        const { errors } = req.query
         const {username, password} = req.body
         console.log(username, password)
         let userData
@@ -47,34 +48,83 @@ class Controller {
                     if(validatePassword) {
                         req.session.UserId = userData.id
                         req.session.UserRole = userData.role
-                        // return res.send(`berhasil login`)
                         return res.redirect(`/users`)
                     } else {
-                        return res.send(`salah password`)
                         error = `invalid password`
-                        // return  res.redirect(`login/?error=${error}`)
+                        return  res.redirect(`login/?error=${error}`)
                     }
                 } else {
-                    error = `username not found`
-                    return res.send(`salah username`)
-                    // return res.redirect(`login/?error=${error}`)
+                    error = `Username not found!`
+                    return res.redirect(`login/?error=${error}`)
                 }
             })
             .catch(err => {
                 res.send(err)
             })
-        // res.redirect(`./login`)
     }
 
     static renderForgetPassword (req,res) {
-        res.render(`loginForget`)
+        res.render(`loginForget`, {data:null})
     }
 
     static postForgetPassword (req,res) {
-        let {username, email} = req.body
-        console.log(username,email)
-        res.redirect(`./login/forget`)
+        let {username, email, answer} = req.body
+        let errors = []
 
+        // check answer
+        if(answer) {
+            let {sessionUsername, sessionAnswer} = req.session
+            if(answer === sessionAnswer) {
+                const salt = bcrypt.genSaltSync(10)
+                const hash = bcrypt.hashSync(`default`, salt)
+                User.update({
+                    password : hash
+                } , {
+                    where:
+                    {
+                        username:sessionUsername
+                }})
+                    .then(() => {
+                        res.redirect(url.format({
+                            pathname: `./`,
+                            query: {message:`Password has been reset to "default".`}
+                        }))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.send(err)
+                    })
+            } else {
+                let error = `Reset password failed!`
+                res.redirect(url.format({
+                    pathname:`/login`,
+                    query : { error }
+                }))
+            }
+        } else {
+        // check email & username 
+            User.findOne({
+                where:{ username, email },
+                include: {
+                    model: UserDetail,
+                    attributes : [`validationQuestion`, `validationAnswer`]
+                }
+            })
+            .then(data => {
+                console.log(data)
+                req.session.sessionUsername = data.username
+                req.session.sessionAnswer = data.UserDetail.validationAnswer
+                req.session.sessionQuestion = data.UserDetail.validationAnswer
+                return res.render(`loginForget`, {data} )
+            })
+            .catch(err => {
+                errors = `Invalid data!`
+                res.redirect(url.format({
+                    pathname: `./forget`, 
+                    query: {errors}
+                }))
+            })
+        }
     }
 
     static renderRegister (req,res) {
@@ -97,7 +147,6 @@ class Controller {
             .catch (err => {
                 console.log(err)
                 res.send(err)
-                // res.redirect(`./register`)
             })
     }
 
@@ -112,6 +161,18 @@ class Controller {
         .then(data => {
             res.send(data)
         })
+    }
+
+    static renderCompanyList(req,res) {
+
+        Company.findAll()
+            .then(data => {
+                res.send(data)
+            })
+            .catch(err => {
+                console.log(err)
+                res.send(err)
+            })
     }
 }
 
