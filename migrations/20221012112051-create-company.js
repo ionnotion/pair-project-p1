@@ -1,8 +1,8 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Companies', {
+  up(queryInterface, Sequelize) {
+    return queryInterface.createTable('Companies', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -30,6 +30,13 @@ module.exports = {
       foundIn: {
         type: Sequelize.DATE
       },
+      UserId : {
+        type : Sequelize.INTEGER,
+        references : {
+          model : `Users`,
+          key : `id`
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -40,7 +47,7 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Companies');
+  down(queryInterface, Sequelize) {
+    return queryInterface.dropTable('Companies');
   }
 };

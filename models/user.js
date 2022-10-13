@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const bcrypt = require(`bcryptjs`)
+const bcrypt = require(`bcryptjs`);
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Stock, {through:`Investments`})
       User.hasMany(models.Investment)
       User.hasOne(models.UserDetail)
+      User.hasOne(models.Company)
     }
   }
   User.init({

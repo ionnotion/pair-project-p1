@@ -15,7 +15,7 @@ module.exports = {
     let insertData = JSON.parse(fs.readFileSync(`./data/company.json`,`utf-8`)).map(el =>{
       el.createdAt = new Date()
       el.updatedAt = new Date()
-      // el.foundIn =  new Date(el.foundIn)
+      el.foundIn =  new Date(el.foundIn)
 
       return el
     })

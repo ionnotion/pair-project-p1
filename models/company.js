@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Company.belongsTo(models.User)
       Company.hasOne(models.Stock)
     }
   }
@@ -21,7 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     field: DataTypes.STRING,
     email: DataTypes.STRING,
     description: DataTypes.TEXT,
-    foundIn: DataTypes.DATE
+    foundIn: DataTypes.DATE,
+    UserId : {
+      type : DataTypes.INTEGER,
+      references : {
+        model : `Users`,
+        key : `id`
+      }
+    }
   }, {
     sequelize,
     modelName: 'Company',

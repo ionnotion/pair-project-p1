@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
   Investment.init({
     name: DataTypes.STRING,
     lot: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
     StockId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
