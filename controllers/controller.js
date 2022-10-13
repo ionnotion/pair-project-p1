@@ -48,6 +48,7 @@ class Controller {
                     if(validatePassword) {
                         req.session.UserId = userData.id
                         req.session.UserRole = userData.role
+                        req.session.username = userData.username
                         return res.redirect(`/users`)
                     } else {
                         error = `invalid password`
@@ -189,6 +190,8 @@ class Controller {
 
     static renderUserHome(req,res) {
         const id = req.session.UserId
+        const username = req.session.username
+        console.log(req.session)
         User.findOne({
             where : {id},
             include : [{
@@ -199,26 +202,40 @@ class Controller {
             },{
                 model : UserDetail
             }
-        ]
+            ]
         })
         .then(data => {
             // res.send(data)
-            res.render('userInvestments',{ data, profit, toCurrencyRupiah })
+            res.render('userInvestments',{ data, profit, toCurrencyRupiah,username })
         })
         .catch (err => {
-            res.send(err)
+            res.send('err')
         })
     }
 
     static renderCompanyList(req,res) {
-        Company.findAll({
+        const username = req.session.username
+        let { search } = req.query
+        console.log(search)
+
+        let options = {
             include : {
                 model : Stock
+            },
+            where : {}
+        }
+
+        if(search) {
+            options.where = {
+                ...options.where,
+                name : {[Op.iLike]:`%${search}%`}
             }
-        })
+        }
+
+        Company.findAll(options)
         .then(data => {
             // res.send(data)
-            res.render('userCompany',{ data })
+            res.render('userCompany',{ data,username })
         })
         .catch (err => {
             res.send(err)
@@ -226,22 +243,24 @@ class Controller {
     }
 
     static renderStocks(req,res) {
-        let { search } = req.query
+        let { filter } = req.query
+        console.log(filter)
+        const username = req.session.username
+        let bought = []
         let options = {
             include : {
                 model : Investment
             },
             where : {}
         }
-        let bought = []
-
-        if(search) {
+        
+        if(filter) {
             options.where = {
                 ...options.where,
-                type : search
+                type : {[Op.iLike]:`%${filter}%`}
             }
         }
-
+        
         Stock.findAll(options)
         .then(data => {
             // count bought stocks
@@ -252,7 +271,7 @@ class Controller {
                 })
                 bought.push(temp)
             })
-            res.render('userStock',{ data,bought })
+            res.render('userStock',{ data,bought,username })
         })
         .catch (err => {
             res.send(err)
@@ -279,7 +298,7 @@ class Controller {
             } else {
                 console.log(`User logged out.`)
                 res.redirect(url.format({
-                    pathname:`/`,
+                    pathname:`/login`,
                     query: {message: `You've been logged out.`}
                 }))
             }
