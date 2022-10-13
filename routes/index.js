@@ -23,7 +23,7 @@ router.get(`/testing`, Controller.test)
 router.use(`/login`, loginRoutes)
 router.use(`/register`, registerRoutes)
 
-router.use((req,res,next) => {
+const session = ((req,res,next) => {
     if(!req.session.UserId) {
         let message =`You need to login first!`
         res.redirect(`/login?message=${message}`)
@@ -34,7 +34,7 @@ router.use(`/users`, usersRoutes)
 router.use(`/stocks`, stocksRoutes)
 router.use(`/companies`, companiesRoutes)
 
-// router.use(`/investments`, investmentsRoutes)
+// router.use(`/investments`, session, investmentsRoutes)
 
 // define endpoint lain disini
 module.exports = router

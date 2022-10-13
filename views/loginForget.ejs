@@ -7,12 +7,20 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="POST" action ="/login/forget">
-        <label>Username :</label>
-        <input type="text" name="username">
-        <label>Email :</label>
-        <input type="email" name="email">
-        <input type="submit" value="Reset Pasword">
-    </form>
+    <% if(!data) { %>
+        <form method="POST" action ="/login/forget">
+            <label>Username :</label>
+            <input type="text" name="username">
+            <label>Email :</label>
+            <input type="email" name="email">
+            <input type="submit" value="Reset Pasword">
+        </form>
+    <% } else { %>
+        <form method="POST" action ="/login/forget">
+            <label><%= data.UserDetail.validationQuestion%> :</label>
+            <input type="text" name="answer">
+            <input type="submit" value="Reset Pasword">
+        </form>
+    <% } %>
 </body>
 </html>

@@ -18,9 +18,29 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     birthDate: DataTypes.DATE,
-    validationQuestion: DataTypes.STRING,
-    validationAnswer: DataTypes.STRING
+    balance: DataTypes.INTEGER,
+    validationQuestion: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notEmpty : {msg: `Recovery Question must be selected!`},
+        notNull : {msg: `Recovery Question must be selected!`}
+      }
+    },
+    validationAnswer: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notEmpty : {msg: `Recovery Answer must be selected!`},
+        notNull : {msg: `Recovery Answer must be selected!`}
+      }
+    },
   }, {
+    hooks : {
+      beforeCreate: (instance) => {
+        instance.balance = 100000
+      }
+    },
     sequelize,
     modelName: 'UserDetail',
   });
