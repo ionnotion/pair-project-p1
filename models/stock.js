@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Stock.init({
     name: DataTypes.STRING,
-    totalLot: DataTypes.INTEGER,
+    totalLots: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     type: DataTypes.STRING
   }, {

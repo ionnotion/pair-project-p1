@@ -12,7 +12,7 @@ module.exports = {
       name :{
         type: Sequelize.STRING
       },
-      totalLot: {
+      totalLots: {
         type: Sequelize.INTEGER
       },
       price: {

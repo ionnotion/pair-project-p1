@@ -18,6 +18,8 @@ const investmentsRoutes = require(`./investments`)
 //landing page isinya fluff (welcome bla bla) dan button untuk login dan register aja ya?
 router.get(`/`, Controller.landingPage)
 
+router.get(`/testing`, Controller.test)
+
 router.use(`/login`, loginRoutes)
 router.use(`/register`, registerRoutes)
 

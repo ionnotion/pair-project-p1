@@ -11,9 +11,12 @@ module.exports = {
       },
       name: {
         //ini nanti di generate dengan hook kalau user ada transaksi
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       lot: {
+        type: Sequelize.INTEGER
+      },
+      price: {
         type: Sequelize.INTEGER
       },
       createdAt: {

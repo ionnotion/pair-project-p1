@@ -15,7 +15,7 @@ module.exports = {
       lastName: {
         type: Sequelize.STRING
       },
-      birthday: {
+      birthDate: {
         type: Sequelize.DATE
       },
       validationQuestion: {

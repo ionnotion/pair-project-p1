@@ -1,8 +1,27 @@
 const {User, UserDetail, Company, Investment, Stock} = require(`../models/`)
 const bcrypt = require(`bcryptjs`)
-
+const url = require(`url`)
 
 class Controller {
+    static test (req,res) {
+        let options = { 
+            include:{
+                model : Stock,
+                include : {
+                    model: Company
+                }
+            }
+        }
+
+        Company.findAll(options)
+            .then(data => {
+                res.send(data)
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
     static landingPage (req,res) {
         res.send(`landing page`)
     }
@@ -12,24 +31,34 @@ class Controller {
     }
 
     static postLogin (req,res) {
-        let {username, password} = req.body
+        const { errors } = req.query
+        const {username, password} = req.body
         console.log(username, password)
         let userData
+        let error
+
         User.findOne({where: {username}})
             .then(data => {
-                userData = data
-                const validatePassword = bcrypt.compareSync(password, userData.password)
-                console.log(userData)
-                if(validatePassword) {
-                    return res.redirect(`/users/${userData.id}`)
+                
+                if(data) {
+                    userData = data
+                    const validatePassword = bcrypt.compareSync(password, userData.password)
+                    console.log(userData)
+                    if(validatePassword) {
+                        return res.redirect(`/users/${userData.id}`)
+                    } else {
+                        error = `invalid password`
+                        return  res.redirect(`login/?error=${error}`)
+                    }
                 } else {
-
+                    error = `username not found`
+                    return res.redirect(`login/?error=${error}`)
                 }
             })
             .catch(err => {
                 res.send(err)
             })
-        res.redirect(`./login`)
+        // res.redirect(`./login`)
     }
 
     static renderForgetPassword (req,res) {
