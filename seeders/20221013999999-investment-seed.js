@@ -3,7 +3,7 @@ const fs = require(`fs`)
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  up (queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -24,7 +24,7 @@ module.exports = {
     return queryInterface.bulkInsert(`Investments`, insertData, {})
   },
 
-  async down (queryInterface, Sequelize) {
+  down (queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
