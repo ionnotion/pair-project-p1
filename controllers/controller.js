@@ -45,8 +45,10 @@ class Controller {
                     const validatePassword = bcrypt.compareSync(password, userData.password)
                     console.log(userData)
                     if(validatePassword) {
-                        return res.send(`berhasil login`)
-                        // return res.redirect(`/users/${userData.id}`)
+                        req.session.UserId = userData.id
+                        req.session.UserRole = userData.role
+                        // return res.send(`berhasil login`)
+                        return res.redirect(`/users`)
                     } else {
                         return res.send(`salah password`)
                         error = `invalid password`
@@ -97,6 +99,19 @@ class Controller {
                 res.send(err)
                 // res.redirect(`./register`)
             })
+    }
+
+    static renderUserHome(req,res) {
+        const id = req.session.UserId
+        User.findOne({
+            where : {id},
+            include : {
+                model: Investment
+            }
+        })
+        .then(data => {
+            res.send(data)
+        })
     }
 }
 

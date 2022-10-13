@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     lot: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
-    CompanyId: DataTypes.INTEGER,
+    StockId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
     hooks: {

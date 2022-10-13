@@ -6,9 +6,9 @@ const router = express.Router()
 const loginRoutes = require(`./login`)
 const registerRoutes = require(`./register`)
 
-const companiesRoutes = require(`./companies`)
-const stocksRoutes = require(`./stocks`) 
 const usersRoutes = require(`./users`) 
+const stocksRoutes = require(`./stocks`) 
+const companiesRoutes = require(`./companies`)
 
 const investmentsRoutes = require(`./investments`)
 // define routing lain disini
@@ -23,9 +23,16 @@ router.get(`/testing`, Controller.test)
 router.use(`/login`, loginRoutes)
 router.use(`/register`, registerRoutes)
 
-// router.use(`/companies`, companiesRoutes)
+router.use((req,res,next) => {
+    if(!req.session.UserId) {
+        let message =`You need to login first!`
+        res.redirect(`/login?message=${message}`)
+    } else next()
+})
+
+router.use(`/users`, usersRoutes)
 // router.use(`/stocks`, stocksRoutes)
-// router.use(`/users`, usersRoutes)
+// router.use(`/companies`, companiesRoutes)
 
 // router.use(`/investments`, investmentsRoutes)
 
