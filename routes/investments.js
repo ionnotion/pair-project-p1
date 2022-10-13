@@ -7,4 +7,5 @@ const router = express.Router()
 // router.get(`/`,Controller.renderInvestments)
 
 // define endpoint disini
+// router.get('/:id/sell',Controller.sellInvestment)
 module.exports = router

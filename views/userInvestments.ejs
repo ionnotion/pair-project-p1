@@ -41,9 +41,10 @@
                             <th scope="col">code</th>
                             <th scope="col">Stock</th>
                             <th scope="col">Lot</th>
-                            <th scope="col">Price was</th>
                             <th scope="col">Price now</th>
+                            <th scope="col">Price was</th>
                             <th scope="col">Profit</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                     <tbody .table-hover>
@@ -56,6 +57,7 @@
                           <td><%= el.Stock.price %></td>
                           <td><%= el.Stock.previous('price') %></td>
                           <td><%=toCurrencyRupiah(profit(el.Stock.price,el.Stock.previous('price'),el.lot)) %></td>
+                          <td><a href="investments/<%= el.id %>/sell" class="btn btn-outline-danger">Sell</a></td>
                         </tr>
                       <% }) %> 
                       </tbody>
