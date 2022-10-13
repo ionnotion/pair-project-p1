@@ -4,6 +4,7 @@ const router = express.Router()
 
 // define endpoint disini
 router.get(`/`,Controller.renderUserHome)
+// router.get('/signout',Controller.userSignOut)
 
 //untuk ubah account detail/password
 // router.get(`/:id/edit`,Controller.renderEditUser)
