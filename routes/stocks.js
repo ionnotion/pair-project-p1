@@ -6,5 +6,7 @@ const router = express.Router()
 // bisa difilter stocks yang masih ada lot yang masih bisa dibeli, sesuai bidang, risk, atau search by name
 router.get(`/`,Controller.renderStocks)
 
+router.post(`/:StockId/buy`,Controller.buyStock)
+
 // define endpoint disini
 module.exports = router

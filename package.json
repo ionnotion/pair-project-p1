@@ -17,7 +17,8 @@
     "express-session": "^1.17.3",
     "pg": "^8.8.0",
     "sequelize": "^6.25.0",
-    "session": "^0.1.0"
+    "session": "^0.1.0",
+    "uuid": "^9.0.0"
   },
   "repository": {
     "type": "git",

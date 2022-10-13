@@ -192,19 +192,31 @@ class Controller {
         const id = req.session.UserId
         const username = req.session.username
         const role = req.session.UserRole
-        console.log(req.session)
-        User.findOne({
+
+        let { search } = req.query
+
+        let options =  {
             where : {id},
             include : [{
                 model: Investment,
                 include : {
-                    model : Stock
+                    model : Stock,
+                    where: {}
                 }
             },{
                 model : UserDetail
             }
             ]
-        })
+        }
+
+        if(search) {
+            options.include[0].include.where = {
+                ...options.include[0].include.where,
+                name : {[Op.iLike] : `%${search}%`}
+            }
+        }
+
+        User.findOne(options)
         .then(data => {
             // res.send(data)
             res.render('userInvestments',{ id,data, profit, toCurrencyRupiah,username,role })
@@ -300,6 +312,30 @@ class Controller {
             })
     }
 
+    static sellInvestment(req,res) {
+        let {id: InvestmentId} = req.params
+        const id = req.session.UserId
+
+        let investmentData
+        Investment.findByPk(InvestmentId,{
+            include : Stock
+            })
+            .then(data => {
+                investmentData = data
+                return Investment.destroy({where:{id:InvestmentId}})
+            })
+            .then(() => {
+                let profit = investmentData.lot * investmentData.Stock.price
+                return UserDetail.increment({balance: +profit},{where:{UserId:id}})
+            })
+            .then(() => {
+                res.redirect(`/users`)
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
     static userSignout(req, res) {
         req.session.destroy(err=> {
             if(err) {
@@ -312,6 +348,59 @@ class Controller {
                 }))
             }
         })
+    }
+
+    static buyStock(req, res) {
+        let { StockId } = req.params
+        let UserId = req.session.UserId
+
+        let { amount } = req.body
+        console.log(amount)
+        let bought
+        let price
+
+        let purchase
+        
+        let options = {
+            attributes : [[sequelize.fn(`SUM`, sequelize.col(`lot`)), `bought`]],
+            where : {StockId},
+        }
+
+        Investment.findOne(options)
+            .then(data =>{
+                bought = data.dataValues.bought
+                if( amount < 1) {
+                    throw `Purchase amount minimal 1 lot!`
+                }
+                if( +amount >= bought ) throw (`Not enough stock avilable for purchase!`)
+                else {
+                    return Stock.findByPk(StockId, {attributes: [`price`]})
+                }
+            })
+            .then(data => {
+                price = data.price
+                purchase = price * +amount
+                return UserDetail.findOne({where:{UserId},attributes: [`balance`]})
+            })
+            .then(data => {
+                if (data.balance >= purchase) {
+                    return Investment.create({lot:amount,UserId,StockId})
+                } else {
+                    throw `Not enough balance!`
+                }
+            })
+            .then(() => {
+                return UserDetail.decrement({balance: purchase},{where:{UserId}})
+            })
+            .then (()=> {
+                res.redirect(`/users`)
+            })
+            .catch(err => {
+                //handle error disini
+                //errnya string
+                console.log(err)
+                res.send(err)
+            })
     }
 }
 

@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.UserDetail)
       User.hasOne(models.Company)
     }
+
+    greeting() {
+      return `${this.role} - ${this.username}`
+    }
   }
   User.init({
     username: {

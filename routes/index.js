@@ -34,7 +34,7 @@ router.use(`/users`, session, usersRoutes)
 router.use(`/stocks`, session, stocksRoutes)
 router.use(`/companies`, session, companiesRoutes)
 
-// router.use(`/investments`, session, investmentsRoutes)
+router.use(`/investments`, session, investmentsRoutes)
 
 // define endpoint lain disini
 module.exports = router
