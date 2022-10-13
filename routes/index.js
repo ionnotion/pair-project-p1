@@ -30,9 +30,9 @@ const session = ((req,res,next) => {
     } else next()
 })
 
-router.use(`/users`, session, usersRoutes)
-// router.use(`/stocks`, session, stocksRoutes)
-router.use(`/companies`, session, companiesRoutes)
+router.use(`/users`, usersRoutes)
+router.use(`/stocks`, stocksRoutes)
+router.use(`/companies`, companiesRoutes)
 
 // router.use(`/investments`, session, investmentsRoutes)
 

@@ -1,6 +1,8 @@
 const {User, UserDetail, Company, Investment, Stock, sequelize} = require(`../models/`)
 const bcrypt = require(`bcryptjs`)
 const url = require(`url`)
+const {profit, toCurrencyRupiah, timeSince} = require('../helpers/helper')
+const { group } = require('console')
 
 class Controller {
     static test (req,res) {
@@ -188,12 +190,59 @@ class Controller {
         const id = req.session.UserId
         User.findOne({
             where : {id},
+            include : [{
+                model: Investment,
+                include : {
+                    model : Stock
+                }
+            },{
+                model : UserDetail
+            }
+        ]
+        })
+        .then(data => {
+            // res.send(data)
+            res.render('userInvestments',{ data, profit, toCurrencyRupiah })
+        })
+        .catch (err => {
+            res.send(err)
+        })
+    }
+
+    static renderCompanyList(req,res) {
+        Company.findAll({
             include : {
-                model: Investment
+                model : Stock
             }
         })
         .then(data => {
-            res.send(data)
+            // res.send(data)
+            res.render('userCompany',{ data })
+        })
+        .catch (err => {
+            res.send(err)
+        })
+    }
+
+    static renderStocks(req,res) {
+        let bought = []
+        Stock.findAll({
+            include : {
+                model : Investment
+            }    
+        })
+        .then(data => {
+            data.forEach(el=>{
+                let temp = 0
+                el.Investments.forEach(el2=>{
+                    temp+=el2.lot
+                })
+                bought.push(temp)
+            })
+            res.render('userStock',{ data,bought })
+        })
+        .catch (err => {
+            res.send(err)
         })
     }
 
