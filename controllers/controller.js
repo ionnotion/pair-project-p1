@@ -302,6 +302,30 @@ class Controller {
             })
     }
 
+    static sellInvestment(req,res) {
+        let {id: InvestmentId} = req.params
+        const id = req.session.UserId
+
+        let investmentData
+        Investment.findByPk(InvestmentId,{
+            include : Stock
+            })
+            .then(data => {
+                investmentData = data
+                return Investment.destroy({where:{id:InvestmentId}})
+            })
+            .then(() => {
+                let profit = investmentData.lot * investmentData.Stock.price
+                return UserDetail.increment({balance: +profit},{where:{UserId:id}})
+            })
+            .then(() => {
+                res.redirect(`/users`)
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
     static userSignout(req, res) {
         req.session.destroy(err=> {
             if(err) {
@@ -315,6 +339,7 @@ class Controller {
             }
         })
     }
+
 }
 
 module.exports = Controller
