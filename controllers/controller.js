@@ -47,6 +47,7 @@ class Controller {
                     if(validatePassword) {
                         req.session.UserId = userData.id
                         req.session.UserRole = userData.role
+                        req.session.username = userData.username
                         return res.redirect(`/users`)
                     } else {
                         error = `invalid password`
@@ -188,6 +189,8 @@ class Controller {
 
     static renderUserHome(req,res) {
         const id = req.session.UserId
+        const username = req.session.username
+        console.log(req.session)
         User.findOne({
             where : {id},
             include : [{
@@ -198,18 +201,19 @@ class Controller {
             },{
                 model : UserDetail
             }
-        ]
+            ]
         })
         .then(data => {
             // res.send(data)
-            res.render('userInvestments',{ data, profit, toCurrencyRupiah })
+            res.render('userInvestments',{ data, profit, toCurrencyRupiah,username })
         })
         .catch (err => {
-            res.send(err)
+            res.send('err')
         })
     }
 
     static renderCompanyList(req,res) {
+        const username = req.session.username
         Company.findAll({
             include : {
                 model : Stock
@@ -217,7 +221,7 @@ class Controller {
         })
         .then(data => {
             // res.send(data)
-            res.render('userCompany',{ data })
+            res.render('userCompany',{ data,username })
         })
         .catch (err => {
             res.send(err)
@@ -225,6 +229,7 @@ class Controller {
     }
 
     static renderStocks(req,res) {
+        const username = req.session.username
         let bought = []
         Stock.findAll({
             include : {
@@ -239,23 +244,11 @@ class Controller {
                 })
                 bought.push(temp)
             })
-            res.render('userStock',{ data,bought })
+            res.render('userStock',{ data,bought,username })
         })
         .catch (err => {
             res.send(err)
         })
-    }
-
-    static renderCompanyList(req,res) {
-
-        Company.findAll()
-            .then(data => {
-                res.send(data)
-            })
-            .catch(err => {
-                console.log(err)
-                res.send(err)
-            })
     }
 }
 
