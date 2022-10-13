@@ -1,0 +1,5 @@
+[{"name":"CLIRW","type":"low risk","price":159,"totalLots":632,"CompanyId":1},
+{"name":"KBLMU","type":"high risk","price":788,"totalLots":736,"CompanyId":2},
+{"name":"OXBR","type":"low risk","price":684,"totalLots":767,"CompanyId":3},
+{"name":"CYAD","type":"low risk","price":340,"totalLots":650,"CompanyId":4},
+{"name":"VIVE","type":"low risk","price":468,"totalLots":813,"CompanyId":5}]

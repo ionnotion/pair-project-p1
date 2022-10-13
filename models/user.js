@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require(`bcryptjs`);
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -11,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.belongsToMany(models.Stock, {through:`Investments`})
+      User.hasMany(models.Investment)
+      User.hasOne(models.UserDetail)
+      User.hasOne(models.Company)
     }
   }
   User.init({
@@ -19,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     role: DataTypes.STRING
   }, {
+    hooks: {
+      beforeCreate : (user) => {
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(user.password, salt)
+        user.password = hash
+        user.role = `Investor`
+      }
+    },
     sequelize,
     modelName: 'User',
   });

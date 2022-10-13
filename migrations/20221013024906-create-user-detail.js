@@ -2,40 +2,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Companies', {
+    return queryInterface.createTable('UserDetails', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      firstName: {
         type: Sequelize.STRING
       },
-      founder: {
+      lastName: {
         type: Sequelize.STRING
       },
-      logo: {
-        type: Sequelize.STRING
-      },
-      field: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      description: {
-        type: Sequelize.TEXT
-      },
-      foundIn: {
+      birthDate: {
         type: Sequelize.DATE
       },
-      UserId : {
-        type : Sequelize.INTEGER,
-        references : {
-          model : `Users`,
-          key : `id`
-        }
+      validationQuestion: {
+        type: Sequelize.STRING
+      },
+      validationAnswer: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -48,6 +35,6 @@ module.exports = {
     });
   },
   down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Companies');
+    return queryInterface.dropTable('UserDetails');
   }
 };

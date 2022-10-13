@@ -1,18 +1,22 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Investments', {
+  up(queryInterface, Sequelize) {
+    return queryInterface.createTable('Investments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      CompanyId: {
+      name: {
+        //ini nanti di generate dengan hook kalau user ada transaksi
+        type: Sequelize.STRING
+      },
+      lot: {
         type: Sequelize.INTEGER
       },
-      UserId: {
+      price: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -25,7 +29,7 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Investments');
+  down(queryInterface, Sequelize) {
+    return queryInterface.dropTable('Investments');
   }
 };

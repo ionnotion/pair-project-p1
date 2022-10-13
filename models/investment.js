@@ -11,12 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Investment.belongsTo(models.User)
+      Investment.belongsTo(models.Stock)
     }
   }
   Investment.init({
-    CompanyId: DataTypes.INTEGER,
+    name: DataTypes.STRING,
+    lot: DataTypes.INTEGER,
+    StockId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
+    hooks: {
+      beforeCreate : (investment) => {
+        investment.name = `${CompanyId}-${UserId}-${new Date().getTime()}`
+      }
+    },
     sequelize,
     modelName: 'Investment',
   });

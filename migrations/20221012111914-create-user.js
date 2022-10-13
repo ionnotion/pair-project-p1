@@ -9,12 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING
-      },
-      lastName: {
-        type: Sequelize.STRING
-      },
+      // ini kayaknya bisa dipisah di user details?
+      // firstName: {
+      //   type: Sequelize.STRING
+      // },
+      // lastName: {
+      //   type: Sequelize.STRING
+      // },
       username: {
         type: Sequelize.STRING
       },
@@ -25,12 +26,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
-        // admin, investor, company
+        // admin, investor
         type: Sequelize.STRING
       },
-      companyName: {
-        type: Sequelize.STRING
-      },
+      // placeholder
+      // companyName: {
+      //   type: Sequelize.STRING
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

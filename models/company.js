@@ -11,15 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Company.belongsTo(models.User)
+      Company.hasOne(models.Stock)
     }
   }
   Company.init({
     name: DataTypes.STRING,
     founder: DataTypes.STRING,
     logo: DataTypes.STRING,
+    field: DataTypes.STRING,
     email: DataTypes.STRING,
-    description: DataTypes.STRING,
-    foundingTime: DataTypes.DATE
+    description: DataTypes.TEXT,
+    foundIn: DataTypes.DATE,
+    UserId : {
+      type : DataTypes.INTEGER,
+      references : {
+        model : `Users`,
+        key : `id`
+      }
+    }
   }, {
     sequelize,
     modelName: 'Company',
