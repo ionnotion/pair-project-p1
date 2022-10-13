@@ -340,6 +340,58 @@ class Controller {
         })
     }
 
+    static buyStock(req, res) {
+        let { StockId } = req.params
+        let UserId = req.session.UserId
+
+        let { amount } = req.body
+        console.log(amount)
+        let bought
+        let price
+
+        let purchase
+        
+        let options = {
+            attributes : [[sequelize.fn(`SUM`, sequelize.col(`lot`)), `bought`]],
+            where : {StockId},
+        }
+
+        Investment.findOne(options)
+            .then(data =>{
+                bought = data.dataValues.bought
+                if( amount < 1) {
+                    throw `Purchase amount minimal 1 lot!`
+                }
+                if( +amount >= bought ) throw (`Not enough stock avilable for purchase!`)
+                else {
+                    return Stock.findByPk(StockId, {attributes: [`price`]})
+                }
+            })
+            .then(data => {
+                price = data.price
+                purchase = price * +amount
+                return UserDetail.findOne({where:{UserId},attributes: [`balance`]})
+            })
+            .then(data => {
+                if (data.balance >= purchase) {
+                    return Investment.create({lot:amount,UserId,StockId})
+                } else {
+                    throw `Not enough balance!`
+                }
+            })
+            .then(() => {
+                return UserDetail.decrement({balance: purchase},{where:{UserId}})
+            })
+            .then (()=> {
+                res.redirect(`/users`)
+            })
+            .catch(err => {
+                //handle error disini
+                //errnya string
+                console.log(err)
+                res.send(err)
+            })
+    }
 }
 
 module.exports = Controller

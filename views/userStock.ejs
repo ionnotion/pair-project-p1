@@ -50,6 +50,7 @@
                             <th scope="col">Price</th>
                             <th scope="col">Total Lots</th>
                             <th scope="col">Remaining Lots</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                     <tbody .table-hover>
@@ -61,6 +62,7 @@
                           <td><%= el.price %></td>
                           <td><%= el.totalLots %></td>
                           <td><%= el.totalLots-bought[i] %></td>
+                          <td><form method="POST" action="/stocks/<%= el.id %>/buy"><input type="number" name="amount"><input type="submit" class="btn btn btn-outline-success" value="Buy"></form></td>
                         </tr>
                       <% }) %> 
                       </tbody>

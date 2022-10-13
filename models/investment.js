@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate : (investment) => {
-        investment.name = `${CompanyId}-${UserId}-${new Date().getTime()}`
+        investment.name = `${investment.StockId}-${investment.UserId}-${new Date().getTime()}`
       }
     },
     sequelize,
