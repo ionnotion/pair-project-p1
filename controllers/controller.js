@@ -45,14 +45,17 @@ class Controller {
                     const validatePassword = bcrypt.compareSync(password, userData.password)
                     console.log(userData)
                     if(validatePassword) {
-                        return res.redirect(`/users/${userData.id}`)
+                        return res.send(`berhasil login`)
+                        // return res.redirect(`/users/${userData.id}`)
                     } else {
+                        return res.send(`salah password`)
                         error = `invalid password`
-                        return  res.redirect(`login/?error=${error}`)
+                        // return  res.redirect(`login/?error=${error}`)
                     }
                 } else {
                     error = `username not found`
-                    return res.redirect(`login/?error=${error}`)
+                    return res.send(`salah username`)
+                    // return res.redirect(`login/?error=${error}`)
                 }
             })
             .catch(err => {
