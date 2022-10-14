@@ -68,7 +68,11 @@
                           <td><%= el.name %></td>
                           <td><%= el.type %></td>
                           <td><%= el.price %></td>
-                          <td><%= el.totalLots %></td>
+                          <% if (role === `company` && el.CompanyId === id) { %>
+                            <td><form method="POST" action="/stocks/<%= el.id %>/update"><input type="number" name="amount" value="<%=el.totalLots%>"><input type="submit" class="btn btn btn-outline-success" value="Update"></form></td> 
+                          <% } else { %>
+                            <td><%= el.totalLots %></td>
+                          <% } %>
                           <td><%= el.totalLots-bought[i] %></td>
                           <% if (role === `investor`) { %>
                             <td><form method="POST" action="/stocks/<%= el.id %>/buy"><input type="number" name="amount"><input type="submit" class="btn btn btn-outline-success" value="Buy"></form></td>

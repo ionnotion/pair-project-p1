@@ -350,6 +350,56 @@ class Controller {
         })
     }
 
+    static editStock (req,res) {
+        let { StockId } = req.params
+        let UserId = req.session.UserId
+
+        let { amount } = req.body
+
+        let bought
+        let price
+
+        let purchase
+        let totalLots
+        
+        let options = {
+            attributes : [[sequelize.fn(`SUM`, sequelize.col(`lot`)), `bought`]],
+            where : {StockId},
+        }
+
+        Investment.findOne(options)
+            .then(data =>{
+                bought = data.dataValues.bought
+                if( +amount < 1) {
+                    throw `Purchase amount minimal 1 lot!`
+                }
+                else {
+                    return Stock.findByPk(StockId, {attributes:[`price`,`totalLots`]})
+                }
+            })
+            .then(data => {
+                totalLots = data.totalLots
+                let remaining = totalLots - bought
+
+                if( +amount < remaining ) throw (`Cannot set lower than market volume!`)
+                else {
+                    price = data.price
+                    purchase = price * +amount
+                    // console.log(purchase)
+                    return Stock.update({totalLots:+amount} , {where:{id:StockId}})
+                }
+            })
+            .then (()=> {
+                res.redirect(`/stocks`)
+            })
+            .catch(err => {
+                res.redirect(url.format({
+                    pathname:`/stocks`,
+                    query: {error : err}
+                }))
+            })
+    }
+
     static buyStock(req, res) {
         let { StockId } = req.params
         let UserId = req.session.UserId
@@ -390,7 +440,6 @@ class Controller {
                 }
             })
             .then(data => {
-
                 if (data.balance >= purchase) {
                     return Investment.create({lot:amount,UserId,StockId})
                 } else {

@@ -4,7 +4,7 @@ const bcrypt = require(`bcryptjs`)
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -14,7 +14,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-     let insertData = JSON.parse(fs.readFileSync(`./data/users.json`,`utf-8`)).map(el =>{
+    let insertData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`)).map(el => {
       el.createdAt = new Date()
       el.updatedAt = new Date()
 
@@ -23,18 +23,18 @@ module.exports = {
       el.password = hash
 
       return el
-     })
+    })
 
-     return queryInterface.bulkInsert(`Users`, insertData, {})
+    return queryInterface.bulkInsert(`Users`, insertData, {})
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-     return queryInterface.bulkDelete(`Users`, null)
+    return queryInterface.bulkDelete(`Users`, null)
   }
 };

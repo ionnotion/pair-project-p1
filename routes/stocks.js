@@ -7,6 +7,7 @@ const router = express.Router()
 router.get(`/`,Controller.renderStocks)
 
 router.post(`/:StockId/buy`,Controller.buyStock)
+router.post(`/:StockId/update`,Controller.editStock)
 
 // define endpoint disini
 module.exports = router
