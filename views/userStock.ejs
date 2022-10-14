@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .verticalLine {
           border-left: 0.3vw solid #343434;
@@ -40,6 +41,9 @@
                   <label class="btn btn-primary ms-1" for="btnradio1">High Risk</label>
                 </a>
               </div>
+            </div>
+            <div class="chart-container" style="position: absolute; width: 40vw;">
+              <canvas id="myChart"></canvas>
             </div>
 
             <div class="ex4"> 
@@ -76,4 +80,43 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+  const labels = [
+    'CYAD',
+    'CLIRW',
+    'KBLMU',
+    'VIVE',
+    'OXBR'
+    ];
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Total Lots',
+      backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'],
+      borderColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'],
+      data: [650,632,736,813,767],
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {}
+  };
+</script>
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
 </html>
