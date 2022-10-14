@@ -151,7 +151,7 @@ class Controller {
             return
         }
 
-        console.log(req.body)
+        // console.log(req.body)
         let userData = {username, email, password}
         let userDetails = {firstName, lastName, birthday, validationQuestion, validationAnswer}
         if(validationQuestion && validationAnswer){
@@ -231,7 +231,7 @@ class Controller {
         const username = req.session.username
         const role = req.session.UserRole
         let { search } = req.query
-        console.log(search)
+        // console.log(search)
 
         let options = {
             include : {
@@ -258,7 +258,7 @@ class Controller {
     }
 
     static renderStocks(req,res) {
-        let { filter } = req.query
+        let { filter, error } = req.query
         console.log(filter)
         const id = req.session.UserId
         const username = req.session.username
@@ -288,7 +288,7 @@ class Controller {
                 })
                 bought.push(temp)
             })
-            res.render('userStock',{ id,data,bought,username,role })
+            res.render('userStock',{ id,data,bought,username,role,error })
         })
         .catch (err => {
             res.send(err)
@@ -355,11 +355,12 @@ class Controller {
         let UserId = req.session.UserId
 
         let { amount } = req.body
-        console.log(amount)
+
         let bought
         let price
 
         let purchase
+        let totalLots
         
         let options = {
             attributes : [[sequelize.fn(`SUM`, sequelize.col(`lot`)), `bought`]],
@@ -369,20 +370,27 @@ class Controller {
         Investment.findOne(options)
             .then(data =>{
                 bought = data.dataValues.bought
-                if( amount < 1) {
+                if( +amount < 1) {
                     throw `Purchase amount minimal 1 lot!`
                 }
-                if( +amount >= bought ) throw (`Not enough stock avilable for purchase!`)
                 else {
-                    return Stock.findByPk(StockId, {attributes: [`price`]})
+                    return Stock.findByPk(StockId, {attributes:[`price`,`totalLots`]})
                 }
             })
             .then(data => {
-                price = data.price
-                purchase = price * +amount
-                return UserDetail.findOne({where:{UserId},attributes: [`balance`]})
+                totalLots = data.totalLots
+                let remaining = totalLots - bought
+
+                if( +amount > remaining ) throw (`Not enough stock avilable for purchase!`)
+                else {
+                    price = data.price
+                    purchase = price * +amount
+                    // console.log(purchase)
+                    return UserDetail.findOne({where:{UserId},attributes: [`balance`]})
+                }
             })
             .then(data => {
+
                 if (data.balance >= purchase) {
                     return Investment.create({lot:amount,UserId,StockId})
                 } else {
@@ -396,10 +404,10 @@ class Controller {
                 res.redirect(`/users`)
             })
             .catch(err => {
-                //handle error disini
-                //errnya string
-                console.log(err)
-                res.send(err)
+                res.redirect(url.format({
+                    pathname:`/stocks`,
+                    query: {error : err}
+                }))
             })
     }
 }
